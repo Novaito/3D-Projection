@@ -4,8 +4,6 @@ import main.Screen;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Circle;
 
 public class Dot {
 	public double x;
@@ -23,47 +21,64 @@ public class Dot {
 		yp = y;
 	}
 	
-	public Rectangle getDotToSquare(int width) {
-		return new Rectangle(x - width/2, y - width/2, width, width);
-	}
-	
-	public Circle getDotToCircle(int radius) {
-		return new Circle(x, y, radius);
-	}
-	
 	public void fromCenter(int w, int h) {
 		xp = (xp + 1) / 2 * w;
 		yp = (1 - (yp + 1) / 2) * h;
 	}
 	
-	public void projectDot() {
+	public void projectXYDot() {
 		double focal = 1.0;
 		xp = (x/(z + focal)) * focal;
 		yp = (y/(z + focal)) * focal;
 	}
 	
+	public void xTranslate(double dt) {
+		setX(getX() + dt);
+	}
+	
+	public void yTranslate(double dt) {
+		setY(getY() + dt);
+	}
 	public void zTranslate(double dt) {
 		setZ(getZ() + dt);
 	}
 	
 	public void draw(GraphicsContext gc) {
 		gc.setFill(Color.DARKSEAGREEN);
-		gc.fillRect(getX() - 10, getY() - 10, 20, 20);
+		gc.fillRect(getX() - 10, getY() - 10, 10, 10);
 	}
 	
 	public void update(Screen s, double dt) {
 		zTranslate(dt);
-		projectDot(); // Project Z axis on x-y axis
+		projectXYDot(); // Project Z axis on x-y axis
 		fromCenter(s.getWidth(), s.getHeight()); // Udpate points from origin
 	}
 	
-	public void zRotate(double angle, double cx, double cz) {
+	public void yAxisRotate(double angle, double cx, double cz) {
 		double c = Math.cos(angle);
 		double s = Math.sin(angle);
 		double prevX = x - cx;
 		double prevZ = z - cz;
 		x = prevX * c - prevZ * s + cx; // Relative position of center of x
 		z = prevX * s + prevZ * c + cz; // Relative position of center of z
+	}
+	
+	public void xAxisRotate(double angle, double cy, double cz) {
+		double c = Math.cos(angle);
+		double s = Math.sin(angle);
+		double prevY = y - cy;
+		double prevZ = z - cz;
+		y = prevY * c - prevZ * s + cy;
+		z = prevY * s + prevZ * c + cz;
+	}
+	
+	public void zAxisRotate(double angle, double cx, double cy) {
+		double c = Math.cos(angle);
+		double s = Math.sin(angle);
+		double prevX = x - cx;
+		double prevY = y - cy;
+		x = prevX * c - prevY * s + cx;
+		y = prevX * s + prevY * c + cy;
 	}
 	
 	public double getX() {
