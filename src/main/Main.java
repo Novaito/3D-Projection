@@ -1,6 +1,5 @@
 package main;
 
-import shape.Dot;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,29 +8,27 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-import java.util.List;
-import java.util.ArrayList;
+
+import shape.*;
+import forms.Cube;
+
 
 
 public class Main extends Application {
 	
 	private final Screen SCREEN = new Screen(800, 800);
 	
-	private List<Dot> dotList = new ArrayList<>();
-	
-	
 	public void start(Stage stage) {
 		Canvas canvas = new Canvas(SCREEN.getWidth(), SCREEN.getHeight());
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		
-		dotList.add(new Dot(0.25f, 0.25f, 0.25f));
-		dotList.add(new Dot(-0.25f, 0.25f, 0.25f));
-		dotList.add(new Dot(0.25f, -0.25f, 0.25f));
-		dotList.add(new Dot(-0.25f, -0.25f, 0.25f));
-		dotList.add(new Dot(0.25f, 0.25f, -0.25f));
-		dotList.add(new Dot(-0.25f, 0.25f, -0.25f));
-		dotList.add(new Dot(0.25f, -0.25f, -0.25f));
-		dotList.add(new Dot(-0.25f, -0.25f, -0.25f));
+		Cube cube = new Cube(
+			new Dot(0.20f, 0.20f, 0.20f),
+			new Dot(-0.20f, 0.20f, 0.20f),
+			new Dot(0.20f, -0.20f, 0.20f),
+			new Dot(-0.20f, -0.20f, 0.20f)
+		);
+		
 		
 		AnimationTimer loop = new AnimationTimer() {
 			long lastTime;
@@ -45,17 +42,18 @@ public class Main extends Application {
 				
 				double dt = (now - lastTime) * 1e-9; // Conversion nanosec -> sec
 				lastTime = now;
-				angle = Math.PI*dt;
+				angle = 4*Math.PI/9*dt;
 				
 				gc.clearRect(0, 0, SCREEN.getWidth(), SCREEN.getHeight());
 				
-				for (Dot d : dotList) {
-					d.zRotate(angle, 0.0f, 0.0f);
-					d.update(SCREEN, 0.25f * dt);
+				for (Dot d : cube.getDots()) {
+					d.yAxisRotate(angle, 0.0f, 0.0f);
+					d.zAxisRotate(angle, 0.0f, 0.0f);
+					d.update(SCREEN, 0.0f * dt);
 				}
-				for (Dot d : dotList) {
-					d.draw(gc);
-				}
+				cube.getShape().drawFaces(gc, "#3f4a87");
+				cube.getShape().draw(gc);
+				cube.getShape().drawNeon(gc);
 			}
 		};
 		
