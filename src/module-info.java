@@ -1,3 +1,7 @@
+/**
+ * Setup
+ */
+
 module Projection3D {
 	requires javafx.controls;
     requires javafx.fxml;
