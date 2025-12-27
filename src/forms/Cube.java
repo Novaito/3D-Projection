@@ -13,10 +13,10 @@ public class Cube {
 		dots.add(d2);
 		dots.add(d3);
 		dots.add(d4);
-		dots.add(new Dot(d1.getX(), d1.getY(), d1.getZ() - (d1.getX() - d1.getY()) ));
-		dots.add(new Dot(d2.getX(), d2.getY(), d2.getZ() - (d2.getX() - d2.getY()) ));
-		dots.add(new Dot(d3.getX(), d3.getY(), d3.getZ() - (d3.getX() - d3.getY()) ));
-		dots.add(new Dot(d4.getX(), d4.getY(), d4.getZ() - (d4.getX() - d4.getY()) ));
+		dots.add(new Dot(d1.getX(), d1.getY(), d1.getZ() - Math.abs(d1.getX() - d2.getX()) ));
+		dots.add(new Dot(d2.getX(), d2.getY(), d2.getZ() - Math.abs(d1.getX() - d2.getX()) ));
+		dots.add(new Dot(d3.getX(), d3.getY(), d3.getZ() - Math.abs(d1.getX() - d2.getX()) ));
+		dots.add(new Dot(d4.getX(), d4.getY(), d4.getZ() - Math.abs(d1.getX() - d2.getX()) ));
 		
 		s = new Shape(dots);
 		addVertice();
